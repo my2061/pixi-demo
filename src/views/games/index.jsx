@@ -45,7 +45,7 @@ const initGame = () => {
 
   document.body.appendChild(app.view);
 
-  let gameScene, npc, door, box, map, monster;
+  let gameScene, npc, door, box, map, monster, state;
 
   shared.add(imgList.box).load(setup);
 
@@ -59,12 +59,11 @@ const initGame = () => {
 
     // 地图
     map = new Sprite.from(imgList.map);
-    map.zIndex = 100;
+    map.zIndex = -1;
     gameScene.addChild(map);
 
     // npc人物
     npc = new Sprite.from(imgList.npc);
-    npc.zIndex = 101;
     gameScene.addChild(npc);
 
     // 出口：门
@@ -78,7 +77,40 @@ const initGame = () => {
     gameScene.addChild(box);
 
     // 怪物
-    monster = new Sprite.from(imgList.monster);
-    gameScene.addChild(monster);
+    // monster = new Sprite.from(imgList.monster);
+    // gameScene.addChild(monster);
+
+    const monsters = [];
+
+    for(let i = 0; i < 6; i ++){
+      const monster = new Sprite.from(imgList.monster);
+      monster.x = 40 * i;
+      monster.y = randomInt(0, app.stage.height, monster.height)
+      gameScene.addChild(monster);
+    }
+
+
+    state = play;
+
+    app.ticker.add((delta)=> gameLoop(delta))
   }
+
+  function gameLoop(delta){
+    state(delta);
+  }
+
+  function play(){
+    
+  }
+  
+  function end(){
+    
+  }
+
 };
+
+
+
+function randomInt(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
